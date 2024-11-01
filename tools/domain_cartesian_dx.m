@@ -30,7 +30,7 @@ function [eigenval,eigenfun,eigenfun_dx,NN] = domain_cartesian_dx(m,d,L)
 
   % This is stupid, but at least we should get enough 
   % of basis function to choose from
-  N = ceil(m^(1/d)*L/min(L));
+  N = ceil(m^(1/d)*L/min(L)); % BB: N is number of basis function, seems to be 512
   
   % Combined eigenfunction indices (checked the numbers)
   NN = ndgridm(N);
@@ -44,7 +44,7 @@ function [eigenval,eigenfun,eigenfun_dx,NN] = domain_cartesian_dx(m,d,L)
 
   % Define eigenfunction of the negative Laplacian in ND 
   % s.t. Dirichlet boundary. This forms an orthonormal basis.
-  eigenfun = @(n,x) laplace_eig_cart_dirichlet(n,x,L);
+  eigenfun = @(n,x) laplace_eig_cart_dirichlet(n,x,L); % n  - Eigenfunction indices;  x  - Spatial locations [x1 x2]
 
   % Define derivative of the eigenfunction of the negative 
   % Laplacian in ND s.t. Dirichlet boundary 

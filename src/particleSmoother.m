@@ -49,7 +49,7 @@ function [XNK,XLK,PK] = particleSmoother(dynModel,measModel,dynResNorm,odometry,
 % Extract some parameters
 nNonLin = size(x0_nonLin,1);
 nLin = size(x0_lin,1);
-N_T = size(y,1);
+N_T = size(y,1); %N_T is assumed to be how many timestamps for measurement
 ny = size(y,2);
   
 % Allow for both time-varying and constant Q

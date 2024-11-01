@@ -10,3 +10,6 @@ Thumbs.db
 
 # Exclude matlab temp files
 *.asv
+.*/results*
+.*/results/*
+*.mat

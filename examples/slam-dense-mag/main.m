@@ -23,21 +23,26 @@
   params.theta = [650 ; 1.2 ; 200 ; 10];
 
   params.trajType = 'bean_6D';
-  N_K = 10;
+  N_K = 1;% Number of smoother iterations
   params.N_K = N_K;
   params.makePlots = 0; % For plotting during filter and smoother
 
   % Settings for running (choose what to run)
-  runComparisons = false;
+  runComparisons = true;
   makePlots = true; % For plotting in this script
   savePlots = false;
 
 %% Run code to generate results for different disturbances
 if runComparisons
-    nSim = 20;
+    nSim = 1;
     rmses_ekf_3D = zeros(nSim,3);
     rmses_pf_3D = zeros(nSim,12);
     rmses_ps_3D = zeros(nSim,N_K,3);
+ 
+	% we set magdist to run code to generate results for different disturbances
+	%[dx, initState, y, groundTruth] = generateData_dense(params,@dynModel);
+	% but this seems to be a strange disturbance, just adding y = y + params.magDisti; ?
+
     magDist = [zeros(1,3) ; 0, 1, 0 ; 0, 5, 0 ; 0 , 10, 0];
     for iMagDist = 1:size(magDist,1)
         params.magDisti = magDist(iMagDist,:);

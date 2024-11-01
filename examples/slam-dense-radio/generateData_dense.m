@@ -336,11 +336,12 @@ if makePlots && params.visualiseResults
           colorbar
           caxis([min(f) max(f)])
       end
-      plot(groundTruth.pos(1,:),groundTruth.pos(2,:),'k','LineWidth',2)
-      plot(groundTruth.odometry(:,1),groundTruth.odometry(:,2),'r','LineWidth',2)
+      plot_gt_pos = plot(groundTruth.pos(1,:),groundTruth.pos(2,:),'k','LineWidth',2);
+      plot_gt_odom = plot(groundTruth.odometry(:,1),groundTruth.odometry(:,2),'r','LineWidth',2);
       axis equal
       xlim([min(xt(:,1)) max(xt(:,1))])
       ylim([min(xt(:,2)) max(xt(:,2))])
+	  legend([plot_gt_pos, plot_gt_odom], {'true trajectory', 'odometry'});
       title('True map, true trajectory, odometry')
 end
 

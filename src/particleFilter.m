@@ -1,6 +1,10 @@
 function [traj_max,traj_mean,xl_max,xl_mean,P_max,P_mean,traj_sample_iwmax,xn_traj] = ...
     particleFilter(dynModel,measModel,odometry,y,...
     x0_nonLin,x0_lin,P0_lin,Q,R,N_P,dt,sparseFeatures,makePlots)
+% N_P = 100 particle number
+% y is 192-time measurements
+
+
 % PARTICLEFILTER - Run Rao-Blackwellized particle filter
 %
 % Syntax:
@@ -138,7 +142,7 @@ for t=1:N_T
             % Compute innovations and their covariances
             dyt = squeeze(dy(i,:,:));
             e = yt' - dyt * xl(:,i);
-            SS = dyt * P(:,:,i) * dyt' + R;
+            SS = dyt * P(:,:,i) * dyt' + R; %BB: P is the covariance of map; dyt maps map, including position sin-basis functions, to measurement.
         end
 
         % Compute the log weights
@@ -194,7 +198,7 @@ for t=1:N_T
             K = P(:,:,i)*((dyt'/cS')/cS);
         end
         % Update linear states and covariances
-        xl(:,i)  = xl(:,i) + K*e;  
+        xl(:,i)  = xl(:,i) + K*e;  %BB: xl is 515*100 xn is 7 * 100
         P(:,:,i) = P(:,:,i) - K*SS*K'; 
         
         % Predicted measurements of highest weight particle, store for plotting

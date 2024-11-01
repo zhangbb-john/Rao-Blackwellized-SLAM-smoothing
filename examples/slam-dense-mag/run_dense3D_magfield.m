@@ -53,8 +53,8 @@ else
     % ... don't use the same seed and don't visualise any intermediate
     % results
     sameRndSeed = 0;
-    makePlots = 0;
-    params.visualiseResults = 0;
+    makePlots = 1;
+    params.visualiseResults = 1;
     % Extract info from params struct
     Q = params.Q;
     theta = params.theta;
@@ -137,7 +137,7 @@ sparseFeatures = 0; % Run filter with dense features
 runParticleFilter = 1;
 if runParticleFilter
 % Plotting settings
-visualiseResults = 0;
+visualiseResults = 1;
 % Run filter
 [traj_max,traj_mean,xl_max,xl_mean,P_max,P_mean,traj_sample_iwmax,~] = ...
     particleFilter(@dynModel,@measModel,dx,y,...
@@ -180,7 +180,7 @@ rmseFilter = [rmse_pos_max,rmse_pos_mean,...
 
 outputstr = '%.4f %.4f %.4f : ';
 outputstr = repmat(outputstr,1,4);
-fprintf(['RMSE filter : ' outputstr ' \n'], rmseFilter)
+fprintf(['RMSE filter (position / attitude) : ' outputstr ' \n'], rmseFilter)
 
 if nargout >= 1
     savedData = {};
@@ -219,7 +219,7 @@ for k = 1:N_K
     rmse_pos = rms(groundTruth.pos' - traj_smooth_trans);
     
     % Compute RMS orientation error
-    N_T = size(XNK,2);
+    N_T = size(XNK,2); % N_T is assumed to be how many timestamps for measurement
     error_ori = zeros(N_T,3);
     for ii = 1:N_T
         q_traj_trans = XNK(iQuat,ii,k);
@@ -233,7 +233,7 @@ for k = 1:N_K
     % Report
     outputstr = '%.4f %.4f %.4f : ';
     outputstr = repmat(outputstr,1,2);
-    fprintf(['RMSE smoother k=%02i : ' outputstr '\n'], k, rmseSmoother(k,:))
+    fprintf(['RMSE smoother （position / attitude) k=%02i : ' outputstr '\n'], k, rmseSmoother(k,:))
 end
 
 if nargout >= 1 && N_K~=0
@@ -264,12 +264,12 @@ end
 %% Supporting functions
 function dy = measModel(xn)
     N_pred = size(xn,2);
-    dPhix = eigenfun_dx(NN,xn(iPos,:)',1);
+    dPhix = eigenfun_dx(NN,xn(iPos,:)',1);%512 is number of basis function
     dPhiy = eigenfun_dx(NN,xn(iPos,:)',2);
     dPhiz = eigenfun_dx(NN,xn(iPos,:)',3);
-    dPhix = [ones(N_pred,1), zeros(N_pred,2), dPhix];
-    dPhiy = [zeros(N_pred,1), ones(N_pred,1), zeros(N_pred,1), dPhiy];
-    dPhiz = [zeros(N_pred,2), ones(N_pred,1), dPhiz];
+    dPhix = [ones(N_pred,1), zeros(N_pred,2), dPhix]; %BB: this is linear kernel-x's derivative
+    dPhiy = [zeros(N_pred,1), ones(N_pred,1), zeros(N_pred,1), dPhiy]; %BB: this is linear kernel-y's derivative
+    dPhiz = [zeros(N_pred,2), ones(N_pred,1), dPhiz];%BB: this is linear kernel-z's derivative
     Rnb = quat2rmat(xn(iQuat,:)');
     dy = zeros(N_pred,ny,size(dPhix,2));
     for i = 1:N_pred
