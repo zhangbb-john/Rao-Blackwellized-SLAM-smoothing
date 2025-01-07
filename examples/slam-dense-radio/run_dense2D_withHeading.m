@@ -225,7 +225,7 @@ function makePlotsFilter_dense2D_withHeading(xn,xl_max,~,traj_max,yhattraj,~,~,~
       xlim([min(xt(:,1)) max(xt(:,1))])
       ylim([min(xt(:,2)) max(xt(:,2))])
       title('Estimated map')
-    subplot(122); cla; hold on  
+		subplot(122); cla; hold on  
        caxis([min(groundTruth.f) max(groundTruth.f)])
        scatter(traj_max(1,1:t),traj_max(2,1:t),100,yhattraj(1:t)','filled')
        plot(traj_max(1,1:t),traj_max(2,1:t),'k')

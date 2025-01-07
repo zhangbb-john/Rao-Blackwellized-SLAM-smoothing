@@ -14,6 +14,7 @@
   - [2.1. why does dynModel contain noise when predicting state?](#21-why-does-dynmodel-contain-noise-when-predicting-state)
   - [2.2. SS = dy\* P(:,:,i)\*dy' + R;](#22-ss--dy-pidy--r)
 - [3. Issue](#3-issue)
+  - [what is P\_mean?](#what-is-p_mean)
 - [4. Todo](#4-todo)
   - [4.1. compare smoother with filter](#41-compare-smoother-with-filter)
   - [4.2. try to understand the dynModel: does it contain anything related to angular velocity?](#42-try-to-understand-the-dynmodel-does-it-contain-anything-related-to-angular-velocity)
@@ -62,7 +63,44 @@ dy is the derivative of measurement with respect to the map. The map containes 5
 ![alt text](figs/coeff.jpg)
 
 
+
 # 3. Issue
+## what is P_mean?
+Subject: Questions Regarding State Covariance Calculation in Particle Filter Code
+
+Dear Professor Manon Kok,
+
+I am a student from Zhejiang University, and I have some questions regarding the following code in parcileFilter.m:
+```
+for i = 1:N_P
+    P_mean = w(i) * ( P(:,:,i) + (xl_mean - xl(:,i)) * (xl_mean - xl(:,i))');
+end
+```
+Here, P represents the state covariance of the 515 coefficients of the basis functions, which are regarded as linear states within the filter. 
+
+In typical particle filters, P_mean  is usually calculated as follows:
+```
+    weighted_mean = sum(xn .* weights, 2);
+    
+    % Compute covariance of particles
+    P_mean = zeros(size(xn, 1));
+    for j = 1:N_P
+        diff = xn(:,j) - weighted_mean;
+        P_mean = P_mean + weights(j) * (diff * diff');
+    end
+```
+I have a couple of concerns regarding your implementation:
+
+* Variation with Particle Index: In your code, P_mean varies with the particle index i, which seems unusual. Could you clarify the reasoning behind this approach?
+
+* Addition of P(:,:,i): Additionally, I am curious why (xl_mean - xl(:,i)) * (xl_mean - xl(:,i))' adds P(:,:,i). This appears to differ from the typical formulation used in particle filters.
+
+Thank you for your time and assistance.
+
+Best regards,
+Bingbing
+zhangbb.john@gmail.com
+
 # 4. Todo
 ## 4.1. compare smoother with filter
 

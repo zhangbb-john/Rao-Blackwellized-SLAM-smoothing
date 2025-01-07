@@ -22,13 +22,13 @@
   % Default settings
   params = [];
   params.theta = [0.25 ; 2 ; 0.01];
-  params.trajType = 'line_3D';
+  params.trajType = 'square_3D';
   params.N_K = 50;
   params.nMC = 100; % Change this to 1 if you just quickly want to test
-  params.makePlots = 0;
+  params.makePlots = 1;
 
   % Settings for running (choose here what to run)
-  runAlgs = false;
+  runAlgs = true;
   runAlgsDegeneracy = false;
   makePlotsLine = true;
   makePlotsDegeneracy = true;
