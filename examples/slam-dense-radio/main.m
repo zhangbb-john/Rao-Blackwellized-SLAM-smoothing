@@ -23,8 +23,8 @@
   params = [];
   params.theta = [0.25 ; 2 ; 0.01];
   params.trajType = 'square_3D';
-  params.N_K = 50;
-  params.nMC = 100; % Change this to 1 if you just quickly want to test
+  params.N_K = 2;
+  params.nMC = 1; % Change this to 1 if you just quickly want to test
   params.makePlots = 1;
 
   % Settings for running (choose here what to run)
@@ -50,7 +50,7 @@
     % Plotting options
     color = [0, 93, 141]/255;
     cmap = parula(64);
-    clim = [-1 1]*max(abs([min(groundTruth{1}.fullMap_f) max(groundTruth{1}.fullMap_f)]));
+    clim = [-1 1] * max(abs([min(groundTruth{1}.fullMap_f) max(groundTruth{1}.fullMap_f)]));
     alim = []; 
     lims = [-.7 .7 -2 2]; % xlim / ylim
     
@@ -67,7 +67,7 @@
     Phit = eigenfun(NN,xt);
     
     % Make plot odometry + true map
-    figure(1), clf, hold all
+    figure(6), clf, hold all
       %title('Odometry')
       set(gcf,'color','w')
       imagesc(x1t,x2t,reshape(groundTruth{1}.fullMap_f,size(X1t)));
@@ -92,7 +92,7 @@
     end      
       
     % Make plot maximum weight particle
-    figure(2), clf, hold all
+    figure(7), clf, hold all
       set(gcf,'color','w')
       % Map from one of the maximum weight particles
       Eft = Phit*savedData{1}.xl_max;
@@ -118,7 +118,7 @@
     end
     
     % Make plot weighted mean particles
-    figure(3), clf, hold all
+    figure(8), clf, hold all
       set(gcf,'color','w')
       % Map from one of the weighted mean particles
       Eft = Phit*savedData{1}.xl_mean;
@@ -144,7 +144,7 @@
     end
 
     % Make plot sampled trajectories PS
-    figure(4), clf, hold all
+    figure(9), clf, hold all
       set(gcf,'color','w')
       %title('Samples smoother, after 10 iterations')
       % Map from one of the trajectories from one of the iterations
@@ -219,7 +219,7 @@
             [min(xt(:,2))+.3 max(xt(:,2))-.3]];
     
     % Plot ground-truth
-    figure(6); clf; hold on
+    figure(10); clf; hold on
         set(gcf,'color','w')    
         imagesc(x1t,x2t,reshape(groundTruth{1}.fullMap_f,size(X1t)));
         
@@ -239,7 +239,7 @@
     end
   
     % Plot degenerate filtering solution
-    figure(7), clf, hold all
+    figure(11), clf, hold all
         set(gcf,'color','w')    
         % Compute map of highest weight particle, which is exactly the one
         % of which we plot the trajectory
@@ -270,7 +270,7 @@
     end
     
     % Plot non-degenerate smoother solution  
-    figure(8), clf, hold all
+    figure(12), clf, hold all
         set(gcf,'color','w')
         % Compute map of one of the trajectories
         Eft = Phit*savedData{1}.XLK(:,end);

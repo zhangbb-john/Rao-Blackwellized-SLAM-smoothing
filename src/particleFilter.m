@@ -1,6 +1,6 @@
 function [traj_max,traj_mean,xl_max,xl_mean,P_max,P_mean,traj_sample_iwmax,xn_traj] = ...
     particleFilter(dynModel,measModel,odometry,y,...
-    x0_nonLin,x0_lin,P0_lin,Q,R,N_P,dt,sparseFeatures,makePlots)
+    x0_nonLin,x0_lin,P0_lin,Q,R,N_P,dt,sparseFeatures,makePlots, groundTruth)
 % N_P = 100 particle number
 % y is 192-time measurements
 
@@ -110,7 +110,7 @@ for t=1:N_T
             ai(i) = sample(w); 
             % ... and propagate that nonlinear state through dynamics
             xn(:,i) = dynModel(xn_(:,ai(i)),odometry(t-1,:),dt(t-1),Q(:,:,t-1)); 
-        end
+		end
         % The linear states remain equal since no dynamics but shuffle /
         % duplicate based on sampled ancestors
         xl = xl(:,ai);
@@ -225,7 +225,8 @@ end
 % Map of highest weight particle and its covariance
 xl_max = xl(:,iw_max);
 P_max = P(:,:,iw_max);
-  
+disp('xl_max is ');
+disp(xl_max')  
 % Weighted mean map and covariance
 xl_mean = sum(xl.*w,2);
 P_mean = zeros(length(xl_mean));

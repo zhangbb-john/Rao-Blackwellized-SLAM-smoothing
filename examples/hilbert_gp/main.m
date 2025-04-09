@@ -46,3 +46,17 @@
        xt,Eft-1.96*sqrt(Varft+theta(3)),'--r')
   xlabel('Input, x'); ylabel('Output, y'); axis tight
 
+  
+   xt = linspace(-5,5,1280);
+
+  % Perform GP regression (64 = number of eigenfunctions)
+  [Eft,Varft,theta] = testme_sexp_1d(x,y,xt,64);
+  
+  % Show
+  figure(3); clf
+  plot(x,y,'y+',xt,Eft,'-k', ...
+       xt,Eft+1.96*sqrt(Varft),'--b', ...
+       xt,Eft-1.96*sqrt(Varft),'--b', ...
+       xt,Eft+1.96*sqrt(Varft+theta(3)),'--r', ...
+       xt,Eft-1.96*sqrt(Varft+theta(3)),'--r')
+  xlabel('Input, x'); ylabel('Output, y'); axis tight

@@ -83,7 +83,7 @@ switch trajType
         N = 48;
         params.N = N;
         Q = 1E-6 * ones(N,1);
-        Q(N/4 + N/4*(0:2)) = 0.1^2;        
+        Q(N/4 + N/4*(0:2)) = 0.01^2;        
         Q = reshape(Q,[1 1 N]);
         params.Q = Q;
         dynModel = @(xn,dx,dt,Q) [xn(1:2) + [cos(xn(3)), -sin(xn(3)) ; ...
@@ -105,7 +105,7 @@ params.visualiseResults = visualiseResults;
 iPos = 1:2;
  
 %% Preliminaries on GP model
-nBasisFunctions = 128;              % Linear states: basis functions
+nBasisFunctions = 256;              % Linear states: basis functions
 groundTruth.nBasisFunctionsEst = nBasisFunctions;
 d = 2; % The dimensionality of the inputs
 % Domain determined in pre-processing: x \in [-L,L]
@@ -207,7 +207,7 @@ for iMC = 1:nMC
         savedData{iMC}.PK = PK;
     end
 end
-
+disp('End of run_dense2D');
 %% Plotting function
 function makePlotsFilter_dense2D_withHeading(xn,xl_max,~,traj_max,yhattraj,~,~,~,~)
     
@@ -217,6 +217,7 @@ function makePlotsFilter_dense2D_withHeading(xn,xl_max,~,traj_max,yhattraj,~,~,~
     t = sum(~isnan(traj_max(1,:)));
     % Plot
     figure(3);
+	sgtitle('Plot Filter');
     subplot(121); cla; hold on
       imagesc(x1t,x2t,reshape(Eft,size(X1t)));
       colorbar
@@ -229,7 +230,7 @@ function makePlotsFilter_dense2D_withHeading(xn,xl_max,~,traj_max,yhattraj,~,~,~
        caxis([min(groundTruth.f) max(groundTruth.f)])
        scatter(traj_max(1,1:t),traj_max(2,1:t),100,yhattraj(1:t)','filled')
        plot(traj_max(1,1:t),traj_max(2,1:t),'k')
-       scatter(xn(1,:),xn(2,:),'k')
+       scatter(xn(1,:),xn(2,:),'k.')
        axis equal
        xlim([min(xt(:,1)) max(xt(:,1))])
        ylim([min(xt(:,2)) max(xt(:,2))])
@@ -244,7 +245,8 @@ end
     % ... and on whole grid of testing points
     Eft = Phit*xlk; 
     if params.visualiseResults
-        figure(3);
+        figure(4);
+		sgtitle('Plot of Smoother');
             subplot(121); cla; hold on
                 imagesc(x1t,x2t,reshape(Eft,size(X1t)));
                 colorbar

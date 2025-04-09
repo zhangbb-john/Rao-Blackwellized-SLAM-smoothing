@@ -78,7 +78,10 @@ function [f,y] = gp_rnd_SE1D_fast(x,m,LL,theta)
   % Solve GP with optimized hyperparameters and 
   % return predictive mean and variance
   k = S(sqrt(lambda),lengthScale,magnSigma2);
-  foo = diag(sqrt(k))*randn(numel(k),1);
+  coeff = randn(numel(k),1);
+  disp('coeff is');
+  disp(coeff);
+  foo = diag(sqrt(k))*coeff;
   f = Phi*foo;
   
   % Measurement noise

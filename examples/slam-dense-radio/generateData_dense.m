@@ -258,8 +258,11 @@ if field3D
 else
     lengthScale = theta(1); % Length scale parameter 
     % Make 2D domain sufficiently larger around trajectory
+	east_half = max(abs(pos(1,:))) + nLL*lengthScale;
+	north_half = max(abs(pos(2,:))) + nLL*lengthScale;
     LL = [min(pos(1,:)) - nLL*lengthScale , max(pos(1,:)) + nLL*lengthScale ; ...
         min(pos(2,:)) - nLL*lengthScale, max(pos(2,:)) + nLL*lengthScale]';
+	LL = [-east_half, east_half; -north_half, north_half]';
     % The third input argument is field data; We use this option if we
     % don't want to simulate a new field but new measurements and new
     % odometry but keep the same field
@@ -294,6 +297,7 @@ groundTruth.nBasisFunctionsSim = m;
 %% Add measurement noise to odometry by using the dynamic model to put it 
 % on the way that is assume in the model
 Q = params.Q;
+% Q = params.Q * 1e-4;
 if size(Q,3) == 1 % Allow for both time-varying and constant Q
       Q = repmat(Q,[1 1 N]);
 end

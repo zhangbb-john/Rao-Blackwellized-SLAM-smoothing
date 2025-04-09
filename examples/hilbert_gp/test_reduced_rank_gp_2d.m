@@ -137,7 +137,7 @@ function [eigenval,eigenfun,eigenfun_dx,NN] = domain_cartesian_dx(m,d,L)
   if size(L,1)>1
     L = (max(L,[],1)-min(L,[],1))/2;
   end
-
+  disp(['L is ', num2str(L)]);
   % This is stupid, but at least we should get enough 
   % of basis function to choose from
   N = ceil(m^(1/d)*L/min(L)); % BB: N is number of basis function, seems to be 512
